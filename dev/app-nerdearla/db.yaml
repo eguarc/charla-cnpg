@@ -7,7 +7,7 @@ spec:
   instances: 3
   primaryUpdateStrategy: unsupervised
   storage:
-    storageClass: "longhorn"
+    storageClass: "standard"
     size: 2Gi
      # Enable resizing of the PVC if needed
     resizeInUseVolumes: true
