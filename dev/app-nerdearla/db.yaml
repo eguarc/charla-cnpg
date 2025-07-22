@@ -2,7 +2,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: db-cluster
-  namespace: lesa
+  namespace: app-nerdearla
 spec:
   instances: 3
   primaryUpdateStrategy: unsupervised
