@@ -35,9 +35,8 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           env:
-          {{- range .Values.env }}
-          - name: {{ .name }}
-            value: {{ .value }}
+          {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with .Values.securityContext }}
           securityContext:

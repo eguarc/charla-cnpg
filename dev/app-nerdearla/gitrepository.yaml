@@ -9,8 +9,8 @@ spec:
   ref:
     branch: main
   url: ssh://git@github.com/eguarc/charla-cnpg.git
-  secretRef:
-    name: ssh-credentials
+  #secretRef:
+  #  name: ssh-credentials
   ignore: |-
     # exclude all
     /*
