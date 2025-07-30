@@ -1,8 +1,9 @@
 replicaCount: 1
 
 image:
+  #repository: docker-registry.docker-registry.svc.cluster.local:5000/app-nerdearla
   repository: app-nerdearla
-  pullPolicy: IfNotPresent
+  pullPolicy: Never
   tag: ""
 
 imagePullSecrets: []
@@ -13,27 +14,27 @@ env:
   - name: DB_HOST
     valueFrom:
       secretKeyRef:
-        name: db-cluster-app-nerdearla
+        name: db-cluster-app
         key: host
   - name: DB_NAME
     valueFrom:
       secretKeyRef:
-        name: db-cluster-app-nerdearla
+        name: db-cluster-app
         key: dbname
   - name: DB_PORT
     valueFrom:
       secretKeyRef:
-        name: db-cluster-app-nerdearla
+        name: db-cluster-app
         key: port
   - name: DB_USER
     valueFrom:
       secretKeyRef:
-        name: db-cluster-app-nerdearla
+        name: db-cluster-app
         key: user
   - name: DB_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: db-cluster-app-nerdearla
+        name: db-cluster-app
         key: password
 
 serviceAccount:
@@ -50,6 +51,7 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 80
+  targetPort: 5000
 
 ingress:
   enabled: false
@@ -70,11 +72,11 @@ resources:
 livenessProbe:
   httpGet:
     path: /
-    port: http
+    port: 5000
 readinessProbe:
   httpGet:
     path: /
-    port: http
+    port: 5000
 
 autoscaling:
   enabled: false

@@ -149,9 +149,8 @@ def add_task():
     return render_template('add_task.html')
 
 @app.route('/update/<int:task_id>', methods=['POST'])
-def update_task_status():
+def update_task_status(task_id):
     """Update task status via AJAX"""
-    task_id = request.view_args['task_id']
     new_status = request.json.get('status')
     
     if new_status not in ['pending', 'in_progress', 'completed']:
@@ -177,9 +176,8 @@ def update_task_status():
         conn.close()
 
 @app.route('/delete/<int:task_id>', methods=['POST'])
-def delete_task():
+def delete_task(task_id):
     """Delete task"""
-    task_id = request.view_args['task_id']
     
     conn = get_db_connection()
     if conn is None:
