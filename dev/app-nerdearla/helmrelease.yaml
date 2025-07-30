@@ -11,10 +11,10 @@ spec:
   releaseName: app-nerdearla
   chart:
     spec:
-      chart: .helm/
+      chart: app-nerdearla/.helm/
       sourceRef:
         kind: GitRepository
         name: app-nerdearla
       valuesFiles:
-        - .helm/values.yaml
+        - app-nerdearla/.helm/values.yaml
       reconcileStrategy: Revision
