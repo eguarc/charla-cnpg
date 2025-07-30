@@ -17,7 +17,6 @@ spec:
       localeCollate: 'en_US.UTF8'
       localeCType: 'en_US.UTF8'
   monitoring:
-    enabled: true
     enablePodMonitor: true
   affinity:
     enablePodAntiAffinity: true
