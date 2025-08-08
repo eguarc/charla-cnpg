@@ -21,3 +21,7 @@ spec:
   releaseName: kube-prometheus-stack
   targetNamespace: kube-prometheus-stack
   storageNamespace: kube-prometheus-stack
+  values:
+    prometheus:
+      prometheusSpec:
+        podMonitorSelectorNilUsesHelmValues: false
