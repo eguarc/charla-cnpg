@@ -27,21 +27,23 @@ spec:
       defaultClass: false
       defaultDataLocality: best-effort
       reclaimPolicy: Retain
-      recurringJobSelector:
-        enable: true
-        jobList: '[{"name":"dev", "isGroup":true}]'
+#      recurringJobSelector:
+#        enable: true
+#        jobList: '[{"name":"dev", "isGroup":true}]'
 #    defaultBackupStore: 
 #      backupTarget: nfs://
     defaultSettings:
       # Storage settings
-      defaultReplicaCount: 3
+      defaultReplicaCount: 1
       defaultDataPath: /var/lib/longhorn
       createDefaultDiskLabeledNodes: true
       defaultDataLocality: best-effort
-      replicaSoftAntiAffinity: true
-      replicaZoneSoftAntiAffinity: true
+      replicaSoftAntiAffinity: false
+      replicaZoneSoftAntiAffinity: false
       upgradeChecker: false
       backupstorePollInterval: 300
+      replicaAutoBalance: disabled
+      disableRevisionCounter: false
 
       # Performance settings
       storageMinimalAvailablePercentage: 10
@@ -69,6 +71,7 @@ spec:
       backupConcurrentLimit: 5
     
       # Volume settings
+      allowVolumeCreationWithDegraded: true 
       allowVolumeCreationWithDegradedAvailability: true
       autoSalvage: true
       autoDeletePodWhenVolumeDetachedUnexpectedly: true
