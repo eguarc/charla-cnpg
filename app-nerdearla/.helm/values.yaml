@@ -1,0 +1,92 @@
+replicaCount: 1
+
+image:
+  #repository: docker-registry.docker-registry.svc.cluster.local:5000/app-nerdearla
+  repository: app-nerdearla
+  pullPolicy: Never
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+env:
+  - name: DB_HOST
+    valueFrom:
+      secretKeyRef:
+        name: db-cluster-app
+        key: host
+  - name: DB_NAME
+    valueFrom:
+      secretKeyRef:
+        name: db-cluster-app
+        key: dbname
+  - name: DB_PORT
+    valueFrom:
+      secretKeyRef:
+        name: db-cluster-app
+        key: port
+  - name: DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: db-cluster-app
+        key: user
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: db-cluster-app
+        key: password
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 5000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 5000
+readinessProbe:
+  httpGet:
+    path: /
+    port: 5000
+
+autoscaling:
+  enabled: false
+
+volumes: []
+
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

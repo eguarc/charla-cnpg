@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Add Task - Task Manager{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">
+                    <i class="bi bi-plus-circle me-2"></i>Add New Task
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="taskForm">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">
+                            Task Title <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="title" 
+                               name="title" 
+                               placeholder="Enter task title"
+                               required
+                               maxlength="255">
+                        <div class="form-text">
+                            <i class="bi bi-info-circle me-1"></i>
+                            A clear, descriptive title for your task
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" 
+                                  id="description" 
+                                  name="description" 
+                                  rows="4"
+                                  placeholder="Enter task description (optional)"></textarea>
+                        <div class="form-text">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Additional details about what needs to be done
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary me-md-2">
+                            <i class="bi bi-arrow-left me-1"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg me-1"></i>Add Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Tips Card -->
+        <div class="card mt-4 border-info">
+            <div class="card-header bg-info bg-opacity-10">
+                <h6 class="card-title mb-0 text-info">
+                    <i class="bi bi-lightbulb me-2"></i>Tips for Better Task Management
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="bi bi-check2 text-success me-2"></i>
+                        Use clear, action-oriented titles (e.g., "Complete project proposal")
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check2 text-success me-2"></i>
+                        Break large tasks into smaller, manageable pieces
+                    </li>
+                    <li class="mb-0">
+                        <i class="bi bi-check2 text-success me-2"></i>
+                        Include deadlines or priority levels in descriptions
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Form validation and enhancement
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('taskForm');
+        const titleInput = document.getElementById('title');
+        const descriptionInput = document.getElementById('description');
+        
+        // Character counter for title
+        const titleCounter = document.createElement('div');
+        titleCounter.className = 'form-text text-end';
+        titleCounter.innerHTML = '<span id="titleCount">0</span>/255 characters';
+        titleInput.parentNode.appendChild(titleCounter);
+        
+        titleInput.addEventListener('input', function() {
+            const count = this.value.length;
+            document.getElementById('titleCount').textContent = count;
+            
+            if (count > 200) {
+                titleCounter.classList.add('text-warning');
+            } else {
+                titleCounter.classList.remove('text-warning');
+            }
+        });
+        
+        // Auto-resize textarea
+        descriptionInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+        
+        // Form submission enhancement
+        form.addEventListener('submit', function(e) {
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Adding...';
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: db-cluster
+  namespace: app-nerdearla
+spec:
+  instances: 3
+  primaryUpdateStrategy: unsupervised
+  storage:
+    storageClass: "standard"
+    size: 2Gi
+     # Enable resizing of the PVC if needed
+    resizeInUseVolumes: true
+  bootstrap:
+    initdb:
+      dataChecksums: true
+      localeCollate: 'en_US.UTF8'
+      localeCType: 'en_US.UTF8'
+  monitoring:
+    enablePodMonitor: true
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+  # Specifying PostgreSQL configuration
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: "256MB"
+      work_mem: "8MB"
+      maintenance_work_mem: "64MB"
+      effective_cache_size: "1GB"
+      client_encoding: "UTF8"
+      # Append additional PostgreSQL parameters as needed

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Task Manager{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">
+                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+            </h1>
+            <a href="{{ url_for('add_task') }}" class="btn btn-primary">
+                <i class="bi bi-plus me-1"></i>New Task
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card stats-card text-center py-3">
+            <div class="card-body">
+                <i class="bi bi-clock-history display-6 mb-2"></i>
+                <h4 class="card-title">{{ stats.get('pending', 0) }}</h4>
+                <p class="card-text mb-0">Pending</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white text-center py-3">
+            <div class="card-body">
+                <i class="bi bi-arrow-clockwise display-6 mb-2"></i>
+                <h4 class="card-title">{{ stats.get('in_progress', 0) }}</h4>
+                <p class="card-text mb-0">In Progress</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white text-center py-3">
+            <div class="card-body">
+                <i class="bi bi-check-circle display-6 mb-2"></i>
+                <h4 class="card-title">{{ stats.get('completed', 0) }}</h4>
+                <p class="card-text mb-0">Completed</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark text-white text-center py-3">
+            <div class="card-body">
+                <i class="bi bi-list-task display-6 mb-2"></i>
+                <h4 class="card-title">{{ tasks|length }}</h4>
+                <p class="card-text mb-0">Total Tasks</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tasks List -->
+<div class="row">
+    <div class="col-12">
+        {% if tasks %}
+            <h4 class="mb-3">
+                <i class="bi bi-list-ul me-2"></i>Your Tasks
+            </h4>
+            <div class="row">
+                {% for task in tasks %}
+                    <div class="col-lg-6 col-xl-4 mb-3">
+                        <div class="card task-card {{ task.status }} h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title mb-0">{{ task.title }}</h5>
+                                    <div class="dropdown">
+                                        <button class="btn btn-link btn-sm p-0" type="button" data-bs-toggle="dropdown">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#" onclick="updateTaskStatus({{ task.id }}, 'pending')">
+                                                <i class="bi bi-clock me-2"></i>Mark Pending
+                                            </a></li>
+                                            <li><a class="dropdown-item" href="#" onclick="updateTaskStatus({{ task.id }}, 'in_progress')">
+                                                <i class="bi bi-arrow-clockwise me-2"></i>Mark In Progress
+                                            </a></li>
+                                            <li><a class="dropdown-item" href="#" onclick="updateTaskStatus({{ task.id }}, 'completed')">
+                                                <i class="bi bi-check-circle me-2"></i>Mark Completed
+                                            </a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="#" onclick="confirmDelete({{ task.id }}, '{{ task.title }}')">
+                                                <i class="bi bi-trash me-2"></i>Delete
+                                            </a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                {% if task.description %}
+                                    <p class="card-text text-muted small">{{ task.description[:100] }}{% if task.description|length > 100 %}...{% endif %}</p>
+                                {% endif %}
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar me-1"></i>
+                                        {{ task.created_at.strftime('%b %d, %Y') }}
+                                    </small>
+                                    
+                                    {% if task.status == 'pending' %}
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="bi bi-clock me-1"></i>Pending
+                                        </span>
+                                    {% elif task.status == 'in_progress' %}
+                                        <span class="badge bg-info">
+                                            <i class="bi bi-arrow-clockwise me-1"></i>In Progress
+                                        </span>
+                                    {% elif task.status == 'completed' %}
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-check-circle me-1"></i>Completed
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden delete form -->
+                    <form id="delete-form-{{ task.id }}" action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" style="display: none;"></form>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-inbox display-1 text-muted mb-3"></i>
+                <h4 class="text-muted">No tasks yet</h4>
+                <p class="text-muted mb-4">Get started by creating your first task!</p>
+                <a href="{{ url_for('add_task') }}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-plus me-1"></i>Add Your First Task
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

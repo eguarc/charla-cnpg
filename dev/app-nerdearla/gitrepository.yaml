@@ -1,0 +1,18 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: app-nerdearla
+  namespace: flux-system
+spec:
+  interval: 2m
+  ref:
+    branch: main
+  url: ssh://git@github.com/eguarc/charla-cnpg.git
+  secretRef:
+    name: flux-system
+  ignore: |-
+    # exclude all
+    /*
+    # include charts directory
+    !/app-nerdearla/.helm/
